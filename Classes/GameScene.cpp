@@ -29,12 +29,13 @@ bool GameScene::init()
 	{
 		return false;
 	}
-
+	this->current_gold=0;
 	player=new Player();
 	this->addChild(player->getPlayer(),10);
 
 	player->getPlayer()->setPosition3D(Vec3(0,0,-40));
 
+	input_controller=new PlayerInputController(player);
 	//加入camera
 	auto size=Director::getInstance()->getWinSize();
 	//视线左右能看到的角度   所有的宽高比   近裁面   远裁面
@@ -59,11 +60,32 @@ bool GameScene::init()
 	touchListener->onTouchBegan=CC_CALLBACK_2(GameScene::onTouchBegan,this);
 	touchListener->onTouchEnded=CC_CALLBACK_2(GameScene::onTouchEnded,this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener,this);
-
+	schedule(schedule_selector(GameScene::upDateScene));
 	return true;
+}
+
+void GameScene::upDateScene(float dt)
+{
+
 }
 
 bool GameScene::onTouchBegan(Touch *touch, Event *unused_event)
 {
-	this->tou
+	input_controller->receiveTouchBegin(touch->getLocation());
+	return true;
+}
+
+void GameScene::onTouchEnded(Touch *touch, Event *unused_event)
+{
+	input_controller->receiveTouchEnd(touch->getLocation());
+}
+
+void GameScene::earnGold()
+{
+
+}
+
+void GameScene::hitplayer()
+{
+
 }

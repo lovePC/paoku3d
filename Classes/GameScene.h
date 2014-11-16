@@ -3,6 +3,7 @@
 #include "DrawNode3D.h"
 #include "cocos2d.h"
 #include "Player.h"
+#include "PlayerInputController.h"
 using namespace cocos2d;
 
 class GameScene:public Layer
@@ -17,9 +18,20 @@ public:
 
 	void upDateScene(float dt);
 
-	static cocos2d::DrawNode* drawnode;
-
+	//static DrawNode3D* drawnode;
+	void earnGold();
+	void hitplayer();
+private:
 	Player* player;
+	//friend class ObstacleAction;
+	//friend class CoinAction;
+	int current_gold;
+	PlayerInputController* input_controller;
+	Vec2 touch_begin_pos;
+	Vec2 touch_end_pos;
+	Camera* the_camera;
+	//
+	//
 };
 
 
