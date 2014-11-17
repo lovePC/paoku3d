@@ -85,6 +85,11 @@ int MapSequence::gettotalSequence()
 	return this->sequence.size();
 }
 
+void MapSequence::rewind()
+{
+	index=0;
+}
+
 SequenceInfo MapSequence::pump()
 {
 	auto result=std::move(SequenceInfo(0,0,0));

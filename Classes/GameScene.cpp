@@ -1,5 +1,10 @@
 #include "GameScene.h"
 
+#include "MapSequence.h"
+#include "CCMoveBy3D.h"
+#include "cocostudio/CCSGUIReader.h"
+#include <functional>
+
 Scene* GameScene::createScene()
 {
 	auto scene=Scene::create();
@@ -61,12 +66,41 @@ bool GameScene::init()
 	touchListener->onTouchEnded=CC_CALLBACK_2(GameScene::onTouchEnded,this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener,this);
 	schedule(schedule_selector(GameScene::upDateScene));
+
+	//加入障碍物
+	auto map_sequence=new MapSequence();
+	pg_controller.insertMapSequence(map_sequence);
+	pg_controller.preGenerate(this);
+	//加入UI层
+	auto widget=cocostudio::GUIReader::getInstance()->widgetFromJsonFile("HUD/HUD.json");
+	//加入暂停按钮
+	auto pause_button=(ui::Button*)widget->getChildByName("Button_1");
+	pause_button->addTouchEventListener([&](Ref* sender,ui::Widget::TouchEventType type){
+		static bool is_pause=false;
+		if (type==ui::Widget::TouchEventType::ENDED)
+		{
+			if (!is_pause)
+			{
+				Director::getInstance()->pause();
+				is_pause=true;
+			}else
+			{
+				is_pause=false;
+				Director::getInstance()->resume();
+			}
+		}
+	});
+	//加入金币计数
+	gold_text=(ui::TextAtlas*)widget->getChildByName("gold");
+	gold_text->setStringValue("0");
+	this->addChild(widget);
+
 	return true;
 }
 
 void GameScene::upDateScene(float dt)
 {
-
+	pg_controller.randomGenerate(player,this,dt);
 }
 
 bool GameScene::onTouchBegan(Touch *touch, Event *unused_event)
@@ -82,10 +116,21 @@ void GameScene::onTouchEnded(Touch *touch, Event *unused_event)
 
 void GameScene::earnGold()
 {
-
+	this->current_gold++;
+	char str[100];
+	sprintf(str,"%d",current_gold);
+	gold_text->setStringValue(str);
 }
 
 void GameScene::hitplayer()
 {
-
+	auto widget=cocostudio::GUIReader::getInstance()->widgetFromJsonFile("Menu/Menu.json");
+	this->addChild(widget);
+	auto restart_btn=(ui::Button*)widget->getChildByName("restart");
+	restart_btn->addTouchEventListener([&](Ref* sender,ui::Widget::TouchEventType type){
+		Director::getInstance()->replaceScene(GameScene::createScene());
+	});
+	this->pauseSchedulerAndActions();
+	this->_actionManager->removeAllActions();
+	this->player->getPlayer()->stopAllActions();
 }

@@ -4,6 +4,9 @@
 #include "cocos2d.h"
 #include "Player.h"
 #include "PlayerInputController.h"
+#include "PG_Controller.h"
+#include "ui/UIButton.h"
+#include "ui/UITextAtlas.h"
 using namespace cocos2d;
 
 class GameScene:public Layer
@@ -18,20 +21,20 @@ public:
 
 	void upDateScene(float dt);
 
-	//static DrawNode3D* drawnode;
+	static DrawNode3D* drawnode;
 	void earnGold();
 	void hitplayer();
 private:
 	Player* player;
-	//friend class ObstacleAction;
-	//friend class CoinAction;
+	friend class ObstacleAction;
+	friend class CoinAction;
 	int current_gold;
 	PlayerInputController* input_controller;
 	Vec2 touch_begin_pos;
 	Vec2 touch_end_pos;
 	Camera* the_camera;
-	//
-	//
+	PG_Controller pg_controller;
+	ui::TextAtlas* gold_text;
 };
 
 
