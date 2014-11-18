@@ -31,12 +31,22 @@ void PlayerInputController::receiveTouchEnd(Vec2 pos)
 	{
 		if (result>0)//right
 		{
-			//
-			CCLOG("right");
+			if (player->getPlayer()->getPositionX()<10&&!player->getPlayer()->getActionByTag(TURN_RIGHT)&&!player->getPlayer()->getActionByTag(TURN_LEFT))
+			{
+				auto action=MoveBy3D::create(0.2,Vec3(-10,0,0),false);
+				action->setTag(TURN_RIGHT);
+				this->player->getPlayer()->runAction(action);
+				CCLOG("right");
+			}
 		}else//left
-		{//right
-			//
-			CCLOG("left");
+		{
+			if (player->getPlayer()->getPositionX()>-10&&!player->getPlayer()->getActionByTag(TURN_RIGHT)&&!player->getPlayer()->getActionByTag(TURN_LEFT))
+			{
+				auto action=MoveBy3D::create(0.2,Vec3(10,0,0),false);
+				action->setTag(TURN_RIGHT);
+				this->player->getPlayer()->runAction(action);
+				CCLOG("left");
+			}
 		}
 	}else
 	{
