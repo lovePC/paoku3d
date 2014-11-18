@@ -60,7 +60,10 @@ void PG_Controller::generateObsacle(Player* player,Node* render_node)
 	{
 	case MONSTER:
 		{
-			//auto a=new O
+			auto a=new Obstacle();
+			a->initDefault(player,render_node);
+			a->bindTo(render_node);
+			a->getSpirte()->setPosition3D(Vec3(-10,-5,-250));
 		}
 		break;
 	case EMPTY:
@@ -68,12 +71,66 @@ void PG_Controller::generateObsacle(Player* player,Node* render_node)
 		break;
 	case COIN:
 		{
-
+			auto a=new Coin(player,render_node);
+			a->bindToLayer(render_node);
+			a->getSprite()->setPosition3D(Vec3(-10,0,-250));
+			a->getSprite()->setRotation3D(Vec3(90,0,180));
 		}
 		break;
 	default:
 		break;
 	}
+
+	switch (sequence.M)
+	{
+	case MONSTER:
+		{
+			auto a=new Obstacle();
+			a->initDefault(player,render_node);
+			a->bindTo(render_node);
+			a->getSpirte()->setPosition3D(Vec3(0,-5,-250));
+		}
+		break;
+	case EMPTY:
+		//do nothing
+		break;
+	case COIN:
+		{
+			auto a=new Coin(player,render_node);
+			a->bindToLayer(render_node);
+			a->getSprite()->setPosition3D(Vec3(0,0,-250));
+			a->getSprite()->setRotation3D(Vec3(90,0,180));
+		}
+		break;
+	default:
+		break;
+	}
+
+	switch (sequence.R)
+	{
+	case MONSTER:
+		{
+			auto a=new Obstacle();
+			a->initDefault(player,render_node);
+			a->bindTo(render_node);
+			a->getSpirte()->setPosition3D(Vec3(10,-5,-250));
+		}
+		break;
+	case EMPTY:
+		//do nothing
+		break;
+	case COIN:
+		{
+			auto a=new Coin(player,render_node);
+			a->bindToLayer(render_node);
+			a->getSprite()->setPosition3D(Vec3(10,0,-250));
+			a->getSprite()->setRotation3D(Vec3(90,0,180));
+		}
+		break;
+	default:
+		break;
+	}
+
 }
 
 void PG_Controller::generateCoin(Player* player,Node* render_node)
